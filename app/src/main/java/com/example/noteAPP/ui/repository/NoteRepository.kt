@@ -8,15 +8,13 @@ import com.example.noteAPP.ui.model.Note
 
 //Class that contains subclasses
 sealed class ValidationResult {
+    object Success: ValidationResult()
     data class Failure(val errors: List<String>) : ValidationResult()
 }
 
 class NoteRepository : ViewModel() {
     var noteList by mutableStateOf(
-        listOf<Note>(
-            Note(1, "Hi", "World"),
-            Note(2, "Hi", "World"),
-        )
+        listOf<Note>()
     )
         private set //Expose as read-only
 
@@ -25,42 +23,46 @@ class NoteRepository : ViewModel() {
 
         if(title.length < 3) errors.add("Title must be at least 3 characters")
         if(title.length > 50) errors.add("Title must not exceed 50 characters")
-        if(text.length > 120) errors.add("Title must not exceed 120 characters")
+        if(text.length > 120) errors.add("Text must not exceed 120 characters")
 
-        return ValidationResult.Failure(errors)
+       return if(errors.isEmpty()) {
+           ValidationResult.Success
+       } else {
+           ValidationResult.Failure(errors = errors)
+       }
     }
 
     fun noteCount(): Int = noteList.size
 
-    fun addNote(note: Note): Pair<Boolean, Any> {
-        val result: ValidationResult = validateInput(note.title, note.text)
+    fun addNote(title: String, text: String): ValidationResult {
+        val result: ValidationResult = validateInput(title, text)
 
         if(result is ValidationResult.Failure) {
-            return Pair(false, result)
+            return result
         }
 
         noteList += Note(
             id = (noteList.maxOfOrNull { it.id } ?: 0) + 1,
-            title = note.title,
-            text = note.text,
+            title = title,
+            text = text,
         )
 
-        return Pair(true, emptyList<String>())
+        return ValidationResult.Success
     }
 
-    fun modifyNote(note: Note): Pair<Boolean, Any> {
-        val result = validateInput(note.title, note.text)
+    fun modifyNote(noteId: Int, title: String, text: String): ValidationResult {
+        val result: ValidationResult = validateInput(title, text)
 
         if(result is ValidationResult.Failure) {
-            return Pair(false, result)
+            return result
         }
 
-        noteList.find { it.id == note.id}?.apply {
-            title = note.title
-            text = note.text
+        noteList.find { it.id == noteId }?.apply {
+            this.title = title
+            this.text = text
         }
 
-        return Pair(true, emptyList<String>())
+        return ValidationResult.Success
     }
 
     fun removeNote(note: Note) {
