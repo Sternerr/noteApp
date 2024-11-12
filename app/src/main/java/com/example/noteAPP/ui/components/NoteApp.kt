@@ -1,22 +1,55 @@
 package com.example.todoapp.ui.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.todoapp.ui.model.Screen
+import androidx.navigation.navArgument
+import com.example.noteAPP.ui.components.NoteDetail
+import com.example.noteAPP.ui.components.NoteEdit
+import com.example.noteAPP.ui.model.Screen
 import com.example.todoapp.ui.repository.NoteRepository
 
 @Composable
-fun NoteApp(noteRepository: NoteRepository) {
+fun NoteApp() {
     val navController = rememberNavController()
+    val noteRepository = NoteRepository()
 
     NavHost(navController, Screen.Overview.route) {
-        composable(Screen.Overview.route) { OverviewScreen(noteRepository, navController)}
-        composable(Screen.NoteEdit.route) {}
-        composable("${Screen.NoteEdit.route}/{noteId}") {}
-        composable("${Screen.NoteDetail.route}/{noteId}") {}
+        composable(Screen.Overview.route) {
+            OverviewScreen(
+                noteRepository= noteRepository,
+                navController = navController
+            )
+        }
+        composable(Screen.NoteEdit.route) {
+            NoteEdit(
+                noteId = null,
+                noteRepository = noteRepository,
+                navController = navController,
+            )
+        }
+        composable(
+            route ="${Screen.NoteEdit.route}/{noteId}",
+            arguments = listOf(navArgument("noteId") { type = NavType.IntType })) {
+
+            NoteEdit(
+                noteId = it.arguments?.getInt("noteId"),
+                noteRepository = noteRepository,
+                navController = navController,
+            )
+        }
+        composable(
+            route ="${Screen.NoteDetail.route}/{noteId}",
+            arguments = listOf(navArgument("noteId") { type = NavType.IntType })) {
+
+            NoteDetail(
+                noteId = it.arguments?.getInt("noteId"),
+                noteRepository = noteRepository,
+                navController = navController,
+            )
+        }
     }
 }
 
@@ -24,5 +57,5 @@ fun NoteApp(noteRepository: NoteRepository) {
 //@Composable
 //@Preview(showBackground = true)
 //fun PreviewDefault() {
-//    NoteApp(NoteRepository())
+//    NoteApp()
 //}
