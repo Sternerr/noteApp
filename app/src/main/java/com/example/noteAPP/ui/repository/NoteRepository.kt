@@ -1,5 +1,8 @@
 package com.example.todoapp.ui.repository
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.noteAPP.ui.model.Note
 
@@ -9,11 +12,13 @@ sealed class ValidationResult {
 }
 
 class NoteRepository : ViewModel() {
-    var noteList: MutableList<Note> = mutableListOf(
-        Note(1, "Hi", "World"),
-        Note(2, "Hi", "World"),
+    var noteList by mutableStateOf(
+        listOf<Note>(
+            Note(1, "Hi", "World"),
+            Note(2, "Hi", "World"),
+        )
     )
-        private set //Setter only available in this file
+        private set //Expose as read-only
 
     private fun validateInput(title: String, text: String): ValidationResult {
         val errors: MutableList<String> = mutableListOf()
@@ -25,6 +30,8 @@ class NoteRepository : ViewModel() {
         return ValidationResult.Failure(errors)
     }
 
+    fun noteCount(): Int = noteList.size
+
     fun addNote(note: Note): Pair<Boolean, Any> {
         val result: ValidationResult = validateInput(note.title, note.text)
 
@@ -32,11 +39,11 @@ class NoteRepository : ViewModel() {
             return Pair(false, result)
         }
 
-        noteList.add(Note(
+        noteList += Note(
             id = (noteList.maxOfOrNull { it.id } ?: 0) + 1,
             title = note.title,
             text = note.text,
-        ))
+        )
 
         return Pair(true, emptyList<String>())
     }
@@ -57,6 +64,6 @@ class NoteRepository : ViewModel() {
     }
 
     fun removeNote(note: Note) {
-        noteList.removeAll { it.id == note.id}
+        noteList = noteList.filter { it.id != note.id }
     }
 }

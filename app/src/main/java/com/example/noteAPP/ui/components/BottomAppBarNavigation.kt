@@ -27,7 +27,7 @@ fun BottomAppBarNavigation(noteRepository: NoteRepository, navController: NavCon
                 .fillMaxWidth()
                 .padding(16.dp)
         ){
-            Text("${noteRepository.noteList.count()} Notes")
+            Text("${noteRepository.noteCount()} Notes")
             IconButton(
                 onClick = { navController.navigate(Screen.NoteEdit.route)}
             ) { Icon(Icons.Default.Add, "Add") }
