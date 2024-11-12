@@ -1,11 +1,10 @@
 package com.example.todoapp.ui.repository
 
 import androidx.lifecycle.ViewModel
-import com.example.todoapp.ui.model.Note
+import com.example.noteAPP.model.Note
 
 //Class that contains subclasses
 sealed class ValidationResult {
-    // Class that hold dara
     data class Failure(val errors: List<String>) : ValidationResult()
 }
 
