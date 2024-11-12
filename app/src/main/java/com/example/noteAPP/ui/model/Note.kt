@@ -1,4 +1,4 @@
-package com.example.noteAPP.model
+package com.example.noteAPP.ui.model
 
 // data class is used to hold data
 data class Note(

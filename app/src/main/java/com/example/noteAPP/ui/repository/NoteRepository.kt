@@ -1,7 +1,7 @@
 package com.example.todoapp.ui.repository
 
 import androidx.lifecycle.ViewModel
-import com.example.noteAPP.model.Note
+import com.example.noteAPP.ui.model.Note
 
 //Class that contains subclasses
 sealed class ValidationResult {

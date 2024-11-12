@@ -1,4 +1,4 @@
-package com.example.noteAPP.model
+package com.example.noteAPP.ui.model
 
 sealed class Screen(val route: String) {
     //Object define and create an instance of a class in a single step

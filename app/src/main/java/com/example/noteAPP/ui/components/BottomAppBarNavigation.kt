@@ -1,5 +1,4 @@
 package com.example.todoapp.ui.components
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.todoapp.ui.model.Screen
+import com.example.noteAPP.ui.model.Screen
 import com.example.todoapp.ui.repository.NoteRepository
 
 @Composable
